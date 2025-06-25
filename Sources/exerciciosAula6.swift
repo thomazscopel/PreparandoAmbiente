@@ -1,4 +1,5 @@
 // Estudando Arrays
+import Foundation
 
 // Exercicio 1 - concatenar arrays
 func aula6ex1() {
@@ -87,4 +88,23 @@ func aula6ex6() {
     }
 
     print(result)
+}
+
+func aula6ex7() {
+    var nums: [Int] = [1, 2, 3, 5, 10, 9, 7, 6, 8, 4]
+
+    nums.sort()
+
+    let meio = Int(floor(Double(nums.count/2)))
+
+    var mediana: Double = 0 
+
+    if nums.count % 2 == 0 {
+        mediana = (Double(nums[meio] + nums[meio-1]))/2
+    } else {
+        mediana = Double(nums[meio])
+    }
+
+    print("Lista: ", nums)
+    print("Mediana: ", mediana)
 }
