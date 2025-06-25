@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:PreparandoAmbiente}",
+            "name": "Debug PreparandoAmbiente",
+            "program": "${workspaceFolder:PreparandoAmbiente}/.build/debug/PreparandoAmbiente",
+            "preLaunchTask": "swift: Build Debug PreparandoAmbiente"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:PreparandoAmbiente}",
+            "name": "Release PreparandoAmbiente",
+            "program": "${workspaceFolder:PreparandoAmbiente}/.build/release/PreparandoAmbiente",
+            "preLaunchTask": "swift: Build Release PreparandoAmbiente"
+        }
+    ]
+}
