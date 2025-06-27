@@ -91,3 +91,75 @@ let imposto = Double(readLine()!)!
 let precoFinal = calculaPreco(preco: preco, desconto: desconto, imposto: imposto)
 print("O preco final de compra eh \(precoFinal)")
 */
+
+// GUIA DO ALUNO
+
+// Exercicio 1
+func ehPrimo (_ numero: Int) -> Bool {
+    for i in 2..<numero {
+        if(numero % i == 0) {
+            return false
+        }
+    }
+    return true
+}
+
+/*
+let n = Int(readLine()!)!
+
+if ehPrimo(n) {
+    print("Eh primo")
+} else {
+    print("Nao eh primo")
+}
+*/
+
+// Exercicio 2
+func fibonnacci(de numero: Int) -> Int {
+    // Casos base
+    if (numero == 0) {return 0}
+    if (numero == 1) {return 1}
+    
+    // Aloca espaco criando um array do tamanho numero+1 preenchido com 0s
+    var fib: [Int] = [Int] (repeating: 0, count: numero+1)
+    fib[1] = 1
+    
+    // Calcula de forma dinamica aproveitando valores ja armazenados no array
+    for i in 2...numero {
+        fib[i] = fib[i-2] + fib[i-1]
+    }
+    return fib[numero]
+}
+
+func fatorial(de numero: Int) -> Int {
+    var fat = 1 
+    
+    // Fatorial de 0 = 1
+    if (numero == 0) {return 1}
+    
+    for i in 2...numero {
+        fat *= i
+    }
+    
+    return fat
+}
+
+/*
+let n = Int(readLine()!)!
+
+print(fibonnacci(de: n))
+print(fatorial(de: n))
+*/
+
+// Exercicio 3
+func sequencia(de numero: Int, funcao: (Int) -> Int) -> [Int] {
+    var arr: [Int] = []
+    for i in 0...numero {
+        arr.append(funcao(i))
+    }
+    return arr
+}
+/*
+let n = Int(readLine()!)!
+print(sequencia(de: n, funcao: fibonnacci))
+*/
