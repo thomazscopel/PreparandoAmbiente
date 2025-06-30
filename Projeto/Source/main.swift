@@ -2,20 +2,17 @@ import Foundation
 
 func showMenu() {
     print("""
-    ************************************
-              MENU DE OPÇÕES
-    ************************************
-    1. Adicionar Tarefa
-    2. Remover Tarefa
-    3. Mostrar Tarefas
-    4. Atualizar Tarefas
-    5. Sair
-    
-    Digite sua opção:
+    === Lista de Tarefas ===
+    1 - Listar tarefas
+    2 - Adicionar tarefa
+    3 - Remover tarefa
+    4 - Editar tarefa
+    0 - Sair
+    Escolha uma opção:
     """, terminator: "")
 }
 
-func mostrarTarefas(lista: [String]) {
+func listarTarefas(lista: [String]) {
     print("\n--- Suas Tarefas ---")
     if !lista.isEmpty {
         for (index, tarefa) in lista.enumerated() {
@@ -34,7 +31,7 @@ func adicionarTarefa(lista: inout [String]) {
     
     // Repete enquanto o usuario quiser adicionar para multiplas tarefas
     repeat {
-        mostrarTarefas(lista: lista)
+        listarTarefas(lista: lista)
         print("Digite sua nova tarefa ou digite 'v' para voltar: ")
         guard var linha = readLine() else {
             print("Nenhuma entrada identificada! Retornando ao Menu.")
@@ -67,7 +64,7 @@ func removerTarefa(lista: inout [String]) {
             return
         }
         
-        mostrarTarefas(lista: lista) 
+        listarTarefas(lista: lista) 
         print("Digite o número da tarefa que deseja remover ( ou 'v' para voltar): ", terminator: "")
         
         guard var linha = readLine() else {
@@ -99,18 +96,75 @@ func removerTarefa(lista: inout [String]) {
     
 }
 
+func editarTarefas(lista: inout [String]) {
+    if lista.isEmpty {
+        print("Lista vazia nada para editar! Retornando ao Menu")
+        return
+    }
+
+    var editando = true
+
+    repeat {
+        listarTarefas(lista: lista)
+
+        print("Digite o numero da tarefa que gostaria de editar(ou 'v' para voltar): ", terminator: "")
+        guard var linha = readLine() else {
+            print("Nenhuma entrada identificada! Retornando ao Menu.")
+            return
+        }
+
+        linha = linha.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if linha.lowercased() == "v" {
+            return
+        }
+
+        if let indiceTarefaEditar = Int(linha) {
+            if indiceTarefaEditar >= 0 && indiceTarefaEditar < lista.count {
+                print("Editando Tarefa \(indiceTarefaEditar)...")
+
+                repeat {
+                    print("Digite o novo texto (ou 'v' para voltar): ")
+                    
+                    guard var textoEditado = readLine() else {
+                        print("Nenhuma entrada identificada! Retornando ao Menu.")
+                        return
+                    }
+
+                    textoEditado = textoEditado.trimmingCharacters(in: .whitespacesAndNewlines)
+
+                    if textoEditado.isEmpty {
+                        print("Não é permitido atualizar tarefa por entrada vazia!")
+                    } else if textoEditado.lowercased() == "v" {
+                        break
+                    } else {
+                        lista[indiceTarefaEditar] = textoEditado
+                        print("Texto editado com sucesso!")
+                        editando = false
+                    }
+                } while editando
+
+            } else {
+                print("Entrada fora do intervalo de tarefas!")
+            }
+        } else {
+            print("Entrada inválida! Por favor insira um número.")
+        }
+    } while editando
+}
+
 // FIM DE FUNCOES
 
 // main()
 
-var opcao: Int = 0 
+var opcao: Int = -1 
 var listaTarefas: [String] = []
 
 // Loop para verificar uma entrada válida
 repeat {
     showMenu()
     guard let input = readLine() else {
-        print("Nenhuma entrada identificada, encerrando programa!")
+        print("\nNenhuma entrada identificada, encerrando programa!")
         exit(0) 
     }
 
@@ -118,15 +172,15 @@ repeat {
         // Atribui o valor lido a 'opcao' se for um número válido
         opcao = numOpcao
         
-        if opcao < 1 || opcao > 5 {
-            print("Opção Inválida! Deve inserir um número entre 1 e 5.")
+        if opcao < 0 || opcao > 4 {
+            print("Opção Inválida! Deve inserir um número entre 0 e 4.")
         } else {
             switch opcao {
-                case 1: adicionarTarefa(lista: &listaTarefas)
-                case 2: removerTarefa(lista: &listaTarefas)
-                case 3: mostrarTarefas(lista: listaTarefas)
-                case 4: print("To do")
-                case 5:
+                case 1: listarTarefas(lista: listaTarefas)
+                case 2: adicionarTarefa(lista: &listaTarefas)
+                case 3: removerTarefa(lista: &listaTarefas)
+                case 4: editarTarefas(lista: &listaTarefas)
+                case 0:
                     print("Encerrando programa...")
                     exit(0)
                 default:
@@ -138,6 +192,6 @@ repeat {
         print("Entrada inválida! Por favor, digite um número.")
     }
     
-    opcao = 0 // Atribui valor fora do intervalo para permanencia do loop
+    opcao = -1 // Atribui valor fora do intervalo para permanencia do loop
 
-} while opcao < 1 || opcao > 5 // O loop continua enquanto a opcao for inválida
+} while opcao < 0 || opcao > 4 // O loop continua enquanto a opcao for inválida
