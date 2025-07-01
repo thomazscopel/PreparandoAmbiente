@@ -1,3 +1,11 @@
+/*****************************************************************
+Desenvolvedor: Thomaz de Souza Scopel
+Curso: Logica de Programacao em Swift
+Data da ultima atualizacao: 01/07/2025
+Motivo: Adicionando funcao mudarPrioridade e finalizando projeto
+*******************************************************************/
+
+
 import Foundation
 
 func showMenu() {
