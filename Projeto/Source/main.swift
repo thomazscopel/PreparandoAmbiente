@@ -7,6 +7,7 @@ func showMenu() {
     2 - Adicionar tarefa
     3 - Remover tarefa
     4 - Editar tarefa
+    5 - Mudar prioridade 
     0 - Sair
     Escolha uma opção:
     """, terminator: "")
@@ -65,6 +66,17 @@ func editarTarefas(lista: [String], indice: Int, texto: String) -> [String]? {
     } 
 }
 
+
+func mudarPrioridade(lista: [String], i indiceDesejado: Int, j indiceMudar: Int) -> [String] {
+    var listaAux = lista
+
+    let aux = listaAux[indiceDesejado]
+    listaAux[indiceDesejado] = listaAux[indiceMudar]
+    listaAux[indiceMudar] = aux
+
+    return listaAux
+}
+
 // FIM DE FUNCOES
 
 // main()
@@ -85,7 +97,7 @@ repeat {
         // Atribui o valor lido a 'opcao' se for um número válido
         opcao = numOpcao
         
-        if opcao < 0 || opcao > 4 {
+        if opcao < 0 || opcao > 5 {
             print("Opção Inválida! Deve inserir um número entre 0 e 4.")
         } else {
             switch opcao {
@@ -199,6 +211,42 @@ repeat {
                         }
                     } while !terminouEditar
 
+                case 5:
+                    // verifica se existe mais de um item para poder trocar de lugar
+                    if listaDeTarefas.count > 1 {
+                        listarTarefas(lista: listaDeTarefas)
+                        print("Digite o indice que deseja mudar e sua nova posição (separe por espaço): ", terminator: "")
+
+                        guard let input = readLine() else {
+                            print("Nenhuma entrada identificada!")
+                            exit(1)
+                        }
+
+                        let inputSeparado = input.split(separator: " ")
+
+                        if let indiceMudar = Int(inputSeparado[0]) {
+                            if let indiceDesejado = Int(inputSeparado[1]) {
+                                // Verificar se os indices sao validos
+                                if indiceMudar >= 0 && indiceMudar < listaDeTarefas.count {
+                                    if indiceDesejado >= 0 && indiceDesejado < listaDeTarefas.count {
+                                        listaDeTarefas = mudarPrioridade(lista: listaDeTarefas, i: indiceDesejado, j: indiceMudar)
+                                        print("Ordem trocada com sucesso!")
+                                        listarTarefas(lista: listaDeTarefas)
+                                    } else {
+                                        print("Segundo indice fora de intervalo!")
+                                    }
+                                } else {
+                                    print("Primeiro indice fora de intervalo!")
+                                }
+                            } else {
+                                print("Segunda entrada precisa ser um numero!")
+                            }
+                        } else {
+                            print("Primeira entrada precisa ser um numero!")
+                        }
+                    } else {
+                        print("Muito poucos itens para mudar de ordem...")
+                    }
                 // ENCERRAR PROGRAMA
                 case 0:
                     print("Encerrando programa...")
@@ -214,4 +262,4 @@ repeat {
     
     opcao = -1 // Atribui valor fora do intervalo para permanencia do loop
 
-} while opcao < 0 || opcao > 4 // O loop continua enquanto a opcao for inválida
+} while opcao < 0 || opcao > 5 // O loop continua enquanto a opcao for inválida
