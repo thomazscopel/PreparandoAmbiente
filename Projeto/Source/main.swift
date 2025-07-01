@@ -25,132 +25,43 @@ func listarTarefas(lista: [String]) {
 }
 
 
-func adicionarTarefa(lista: inout [String]) {
-    
-    var adiciona = true
-    
-    // Repete enquanto o usuario quiser adicionar para multiplas tarefas
-    repeat {
-        listarTarefas(lista: lista)
-        print("Digite sua nova tarefa ou digite 'v' para voltar: ")
-        guard var linha = readLine() else {
-            print("Nenhuma entrada identificada! Retornando ao Menu.")
-            return
-        }
-        
-        // Faz o tratamento da entrada
-        linha = linha.trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        if linha.lowercased() == "v" {
-            adiciona = false
-        } else if linha.isEmpty { // Verifica se eh uma entrada vazia
-            print("A tarefa não pode ser vazia! Por favor digite algo.")
-        } else {
-            let tarefa = linha
-            lista.append(tarefa)
-        }
-        
-    } while adiciona
-}
+func adicionarTarefa(lista: [String], tarefa: String) -> [String] {
+    var listaAux = lista
+    let tarefaAdicionada = tarefa.trimmingCharacters(in: .whitespacesAndNewlines)
 
-func removerTarefa(lista: inout [String]) {
-    
-    var remove = true
-    
-    // Repete enquanto o usuario quiser remover para multiplas tarefas
-    repeat {
-        if (lista.isEmpty) {
-            print("Nada para remover, lista vazia!!")
-            return
-        }
-        
-        listarTarefas(lista: lista) 
-        print("Digite o número da tarefa que deseja remover ( ou 'v' para voltar): ", terminator: "")
-        
-        guard var linha = readLine() else {
-            print("Nenhuma entrada identificada! Retornando ao Menu.")
-            return
-        }
-        
-        // Faz o tratamento da entrada
-        linha = linha.trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        if linha.lowercased() == "v" {
-            remove = false
-        } else if linha.isEmpty { // Verifica se eh entrada vazia
-            print("A entrada não pode ser vazia! Por favor digite algo.")
-        } else {
-            if let indiceTarefaRemovida = Int(linha) { // Verifica se a entrada foi um numero
-                // Verifica se o indice esta dentro do intervalo do array
-                if indiceTarefaRemovida >= 0 && indiceTarefaRemovida < lista.count {
-                    lista.remove(at: indiceTarefaRemovida)
-                } else {
-                    print("Indice inexistente! Digite no intervalo de tarefas!")
-                }
-            } else {
-                print("Entrada inválida! Por favor digite um número!")
-            }
-        }
-        
-    } while remove
-    
-}
-
-func editarTarefas(lista: inout [String]) {
-    if lista.isEmpty {
-        print("Lista vazia nada para editar! Retornando ao Menu")
-        return
+    if tarefaAdicionada.isEmpty {
+        print("Não pode adicionar tarefa vazia!")
+    } else {
+        listaAux.append(tarefa)
     }
+    return listaAux
+}
 
-    var editando = true
+func removerTarefa(lista: [String], indice: Int) -> [String] {
+    var listaAux = lista
+    if lista.isEmpty {
+        print("Nada para remover, lista vazia!!")
+    } else if indice >= 0 && indice < lista.count {
+        listaAux.remove(at: indice)
+        print("Tarefa removida com sucesso")
+    } else {
+        print("Indice fora de intervalo!")
+    }
+    return listaAux
+}
 
-    repeat {
-        listarTarefas(lista: lista)
-
-        print("Digite o numero da tarefa que gostaria de editar(ou 'v' para voltar): ", terminator: "")
-        guard var linha = readLine() else {
-            print("Nenhuma entrada identificada! Retornando ao Menu.")
-            return
-        }
-
-        linha = linha.trimmingCharacters(in: .whitespacesAndNewlines)
-
-        if linha.lowercased() == "v" {
-            return
-        }
-
-        if let indiceTarefaEditar = Int(linha) {
-            if indiceTarefaEditar >= 0 && indiceTarefaEditar < lista.count {
-                print("Editando Tarefa \(indiceTarefaEditar)...")
-
-                repeat {
-                    print("Digite o novo texto (ou 'v' para voltar): ")
-                    
-                    guard var textoEditado = readLine() else {
-                        print("Nenhuma entrada identificada! Retornando ao Menu.")
-                        return
-                    }
-
-                    textoEditado = textoEditado.trimmingCharacters(in: .whitespacesAndNewlines)
-
-                    if textoEditado.isEmpty {
-                        print("Não é permitido atualizar tarefa por entrada vazia!")
-                    } else if textoEditado.lowercased() == "v" {
-                        break
-                    } else {
-                        lista[indiceTarefaEditar] = textoEditado
-                        print("Texto editado com sucesso!")
-                        editando = false
-                    }
-                } while editando
-
-            } else {
-                print("Entrada fora do intervalo de tarefas!")
-            }
-        } else {
-            print("Entrada inválida! Por favor insira um número.")
-        }
-    } while editando
+func editarTarefas(lista: [String], indice: Int, texto: String) -> [String]? {
+    var listaAux = lista
+    if lista.isEmpty {
+        print("Nada para editar, lista vazia!!")
+    } else if indice >= 0 && indice < lista.count {
+        listaAux[indice] = texto
+        print("Tarefa editada com sucesso!")
+        return listaAux
+    } else {
+        print("Indice fora de intervalo!")
+    }
+    return nil
 }
 
 // FIM DE FUNCOES
@@ -176,10 +87,68 @@ repeat {
             print("Opção Inválida! Deve inserir um número entre 0 e 4.")
         } else {
             switch opcao {
-                case 1: listarTarefas(lista: listaTarefas)
-                case 2: adicionarTarefa(lista: &listaTarefas)
-                case 3: removerTarefa(lista: &listaTarefas)
-                case 4: editarTarefas(lista: &listaTarefas)
+                case 1: 
+                    listarTarefas(lista: listaTarefas)
+                case 2:
+                    var adiciona = true
+                    
+                    // Repete enquanto o usuario quiser adicionar para multiplas tarefas
+                    repeat {
+                        listarTarefas(lista: listaTarefas)
+                        print("Digite sua nova tarefa ou digite 'v' para voltar: ")
+                        guard let linha = readLine() else {
+                            print("Nenhuma entrada identificada!")
+                            exit(1)
+                        }                        
+                                               
+                        if linha.lowercased() == "v" {
+                            adiciona = false
+                        } else {
+                            let tarefa = linha                            
+                            listaTarefas = adicionarTarefa(lista: listaTarefas, tarefa: tarefa)
+                        }
+                        
+                    } while adiciona
+
+                case 3: 
+                    var remove = true
+                    
+                    // Repete enquanto o usuario quiser remover para multiplas tarefas
+                    repeat {                                               
+                        listarTarefas(lista: listaTarefas) 
+                        print("Digite o número da tarefa que deseja remover ( ou 'v' para voltar): ", terminator: "")
+                        
+                        guard let linha = readLine() else {
+                            print("Nenhuma entrada identificada!")
+                            exit(1)
+                        }
+                                               
+                        if linha.lowercased() == "v" {
+                            remove = false
+                        } else {
+                            if let indiceTarefaRemovida = Int(linha) { // Verifica se a entrada foi um numero
+                                listaTarefas = removerTarefa(lista: listaTarefas, indice: indiceTarefaRemovida)
+                            } else {
+                                print("Entrada inválida! Por favor digite um número!")
+                            }
+                        }
+                        
+                    } while remove
+                case 4: 
+                    listarTarefas(lista: listaTarefas)
+                    print("Digite o índice da tarefa que deseja editar (ou 'v' para voltar): ", terminator: "")
+
+                    guard let input = readLine() else {
+                        print("Nenhuma entrada identificada!")
+                        exit(1)
+                    }
+
+                    if input.lowercased() != "v" {
+                        if let indiceTarefaEditar = Int(input) {
+                            
+                        }
+                    }
+
                 case 0:
                     print("Encerrando programa...")
                     exit(0)
